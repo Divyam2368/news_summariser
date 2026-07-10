@@ -3,10 +3,12 @@ import { PrismaClient } from '@prisma/client';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 
+
 // Note: We use '../' because we are now inside the 'jobs' folder
 import { fetchTopNews } from '../services/news_service';
 import { scrapeAndTruncateArticle } from '../services/scraper';
 import { summarizeArticle } from '../services/ai_service';
+import {generateEmbedings} from "../services/embedding_service";
 
 // 1. Initialize the raw Postgres connection pool
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
@@ -60,8 +62,26 @@ export async function runNewsPipeline() {
         console.log("\n📝 Generated Summary:");
         console.log(summary);
 
+
+
+        // Step new 4.1 : create vector embedding for summary
+        const textToEmbed = `Title: ${article.title}\nSummary: ${summary}\n`;
+        const embedding = await generateEmbedings(textToEmbed);
+        const embedding_string = JSON.stringify(embedding);
+        console.log("Saving embedding and summary to DB:")
+
         // Step 5: Save the final result to the PostgreSQL database
-        await prisma.article.create({
+        // await prisma.article.create({
+        //   data: {
+        //     title: article.title,
+        //     original_url: article.url,
+        //     summary: summary,
+        //   }
+        // });
+
+        // Step 5: Save the final result to the PostgreSQL database using Raw SQL
+        // Using CAST() instead of ::vector is safer for Prisma's parameterized queries
+        const newArticle = await prisma.article.create({
           data: {
             title: article.title,
             original_url: article.url,
@@ -69,7 +89,16 @@ export async function runNewsPipeline() {
           }
         });
 
-        console.log("💾 Successfully saved new article to PostgreSQL!");
+        console.log(`✅ Base row created with ID: ${newArticle.id}. Injecting vector...`);
+
+        // Step 5b: Inject the vector using a targeted UPDATE statement
+        await prisma.$executeRaw`
+          UPDATE "Article" 
+          SET embedding = CAST(${embedding_string} AS vector) 
+          WHERE id = ${newArticle.id}
+        `;
+
+        console.log("✅ Successfully injected the 1024-dimension vector!");
 
       } catch (processingError) {
         console.error(`❌ Failed to process article: ${article.url}`);
