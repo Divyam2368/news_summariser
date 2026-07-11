@@ -1,7 +1,18 @@
+import express from 'express';
 import { Worker } from 'bullmq';
 import { processArticle } from './services/article_processor';
 import { connectionConfig } from './jobs/queue';
 
+const app = express();
+const PORT = process.env.PORT || 8080;
+
+app.get('/health', (req, res) => {
+    res.status(200).send('Worker is alive and processing queue!');
+});
+
+app.listen(PORT, () => {
+    console.log(`\n🕵️‍♂️ [FREE TIER HACK] Dummy web server listening on port ${PORT}`);
+});
 console.log('👷 [WORKER BOOT] Background Worker process is starting...');
 
 export const articleWorker = new Worker(
