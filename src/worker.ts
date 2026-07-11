@@ -1,7 +1,7 @@
 import express from 'express';
 import { Worker } from 'bullmq';
 import { processArticle } from './services/article_processor';
-import { connectionConfig } from './jobs/queue';
+import { redisConnection } from './jobs/queue';
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -22,7 +22,7 @@ export const articleWorker = new Worker(
         await processArticle(title, url);
     },
     {
-        connection: connectionConfig,
+        connection: redisConnection as any,
         concurrency: 2,
     }
 );
