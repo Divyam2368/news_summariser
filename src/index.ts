@@ -19,7 +19,13 @@ const prisma = new PrismaClient({
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(cors({
+    origin: [
+        'http://localhost:5173',
+        'https://news-summariser-frontend.vercel.app'
+    ],
+    credentials: true
+}));
 // Middleware to parse incoming JSON bodies (essential for future features like keyword search)
 app.use(express.json());
 
