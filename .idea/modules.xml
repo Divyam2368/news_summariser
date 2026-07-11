@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/news_summariser.iml" filepath="$PROJECT_DIR$/.idea/news_summariser.iml" />
+      <module fileurl="file://$USER_HOME$/Downloads/news_summariser_frontend/.idea/news_summariser_frontend.iml" filepath="$USER_HOME$/Downloads/news_summariser_frontend/.idea/news_summariser_frontend.iml" />
+      <module fileurl="file://$USER_HOME$/Downloads/project/.idea/project.iml" filepath="$USER_HOME$/Downloads/project/.idea/project.iml" />
+    </modules>
+  </component>
+</project>

@@ -10,10 +10,12 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
 model Article {
-  id           String   @id @default(uuid())
+  id           String                       @id @default(uuid())
   title        String
-  original_url String   @unique
+  original_url String                       @unique
   summary      String
-  timestamp    DateTime @default(now())
+  timestamp    DateTime                     @default(now())
+  embedding    Unsupported("vector(1024)")?
 }
