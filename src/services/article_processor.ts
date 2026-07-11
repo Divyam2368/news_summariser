@@ -24,6 +24,7 @@ export async function processArticle(title:string , url :string) {
         // Cache HIT: Skip to the next article
         console.log("⚡ [CACHED] Article found in database. Skipping Scrape & LLM.");
         console.log(`📝 Cached Summary:\n${existingArticle.summary}`);
+        return;
     }
 
     console.log("⏳ [NEW] Article not found in cache. Initiating processing...");

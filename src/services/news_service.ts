@@ -37,7 +37,7 @@ export async function fetchTopNews(limit: number = 5): Promise<CleanedArticle[]>
     throw new Error(" Error: NEWS_API_KEY is not defined in your .env file!");
   }
 
-  const url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`;
+  const url = `https://newsapi.org/v2/top-headlines?language=en&apiKey=${apiKey}`;
 
   console.log("Fetching raw data from News API...");
 
@@ -74,16 +74,16 @@ export async function fetchTopNews(limit: number = 5): Promise<CleanedArticle[]>
     throw error; 
   }
 }
-
-// ---------------------------------------------------------
-// 3. Local Execution Test
-// ---------------------------------------------------------
-// This block only runs if you execute this file directly via `npx ts-node`
-if (require.main === module) {
-  fetchTopNews(5)
-    .then(data => {
-      console.log("🚀 Final Cleaned Output Ready for DB/LLM:");
-      console.dir(data, { depth: null, colors: true });
-    })
-    .catch(console.error);
-}
+//
+// // ---------------------------------------------------------
+// // 3. Local Execution Test
+// // ---------------------------------------------------------
+// // This block only runs if you execute this file directly via `npx ts-node`
+// if (require.main === module) {
+//   fetchTopNews(5)
+//     .then(data => {
+//       console.log("🚀 Final Cleaned Output Ready for DB/LLM:");
+//       console.dir(data, { depth: null, colors: true });
+//     })
+//     .catch(console.error);
+// }
