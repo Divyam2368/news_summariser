@@ -35,7 +35,10 @@ export async function processArticle(title:string , url :string) {
 
         // Step 4: Pass the truncated text to Groq for a 3-bullet summary
         const summary = await summarizeArticle(scrapedText);
-
+        if (summary.trim() === 'INVALID_ARTICLE') {
+            console.warn(`[BLOCKED] Skipping URL: ${url} - WAF firewall or invalid CSS payload detected.`);
+            return;
+        }
         console.log("\n📝 Generated Summary:");
         console.log(summary);
 
