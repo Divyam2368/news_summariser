@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
 import { runNewsPipeline } from './jobs/news_pipeline';
-import './jobs/cron'; // Boots up the automated scheduler
 import {generateEmbedings} from './services/embedding_service'
 import { PrismaClient } from '@prisma/client';
 import { Pool } from 'pg';

@@ -2,6 +2,7 @@ import express from 'express';
 import { Worker } from 'bullmq';
 import { processArticle } from './services/article_processor';
 import { redisConnection } from './jobs/queue';
+import './jobs/cron'; // Boots up the automated scheduler
 
 const app = express();
 const PORT = process.env.PORT || 8080;
